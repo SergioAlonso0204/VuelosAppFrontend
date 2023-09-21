@@ -1,21 +1,49 @@
 import { useState } from 'react';
-import '../styles/inicioSesion.css'; // Importa el archivo CSS
+import { useNavigate } from 'react-router-dom';
+import '../styles/inicioSesion.css';
 
 function InicioSesion() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [correoElectronico, setCorreoElectronico] = useState(''); // Cambiado a correoElectronico
+  const [contraseña, setContraseña] = useState(''); // Cambiado a contraseña
+  const [error, setError] = useState('');
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const navigate = useNavigate();
+
+  const handleCorreoElectronicoChange = (e) => {
+    setCorreoElectronico(e.target.value);
   };
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+  const handleContraseñaChange = (e) => {
+    setContraseña(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Agrega aquí la lógica para el inicio de sesión
+
+    try {
+      const response = await fetch('http://localhost:3000/api/usuarios/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ correoElectronico, contraseña }), // Cambiado a correoElectronico y contraseña
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.token;
+
+        localStorage.setItem('authToken', token);
+
+        navigate('/dashboard');
+      } else {
+        setError('Credenciales incorrectas');
+        console.error('Error en la solicitud:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error.message);
+      setError('Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.');
+    }
   };
 
   return (
@@ -23,25 +51,26 @@ function InicioSesion() {
       <h2>Iniciar Sesión</h2>
       <form onSubmit={handleSubmit}>
         <div className="input-field">
-          <label htmlFor="email">Correo Electrónico</label>
+          <label htmlFor="correoElectronico">Correo Electrónico</label> {/* Cambiado a correoElectronico */}
           <input
             type="email"
-            id="email"
-            value={email}
-            onChange={handleEmailChange}
+            id="correoElectronico"
+            value={correoElectronico}
+            onChange={handleCorreoElectronicoChange}
             required
           />
         </div>
         <div className="input-field">
-          <label htmlFor="password">Contraseña</label>
+          <label htmlFor="contraseña">Contraseña</label> {/* Cambiado a contraseña */}
           <input
             type="password"
-            id="password"
-            value={password}
-            onChange={handlePasswordChange}
+            id="contraseña"
+            value={contraseña}
+            onChange={handleContraseñaChange}
             required
           />
         </div>
+        {error && <div className="error-message">{error}</div>}
         <button className="login-button" type="submit">
           Iniciar Sesión
         </button>
