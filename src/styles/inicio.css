@@ -1,0 +1,28 @@
+.inicio-container {
+    position: relative;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  .texto-superior {
+    text-align: center;
+  }
+  
+  .texto-1 {
+    color: #0bbbb4;
+    font-size: 35px;
+  }
+  
+  .texto-2 {
+    color: #fff;
+    font-size: 30px;
+  }
+
+  .texto-3 {
+    color: #fff;
+    font-size: 24px;
+  }

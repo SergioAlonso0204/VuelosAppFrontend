@@ -26,7 +26,7 @@ function InicioSesion() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ correoElectronico, contraseña }), // Cambiado a correoElectronico y contraseña
+        body: JSON.stringify({ correoElectronico, contraseña }), 
       });
 
       if (response.ok) {
